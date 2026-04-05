@@ -1,0 +1,1211 @@
+
+
+outputs for tunning my buffer length processing
+
+check how to make the best tunning for oscar and carelis laptop 
+
+(venv) adomitetp@ThinkPado:~/Documents/voice-agent$ python app/main.py
+🎤 Mic is ON... speak!
+Exception in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.12...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.12...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.09...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.09...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.067...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.067...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.021...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.021...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.004...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.004...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.004...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.004...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.02...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.02...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.11...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.11...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.03...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.03...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.15...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.15...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.04...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.04...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.07...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.07...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.000...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.000...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.008...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.008...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.02...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.02...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.013...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.013...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.006...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.006...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.009...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.009...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.009...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.009...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 1.42...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 1.42...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-2.83...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-2.83...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.11...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.11...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.007...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.007...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.31...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.31...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.36...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.36...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.10...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.10...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.001...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.001...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.002...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.002...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-1.05...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-1.05...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.000...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.000...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.003...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.003...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[5.125...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[5.125...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+^CException in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.001...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.001...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.005...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.005...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.000...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.000...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.07...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.07...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-2.39...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-2.39...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.006...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.006...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-1.66...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-1.66...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+
+👋 Stopped
+(venv) adomitetp@ThinkPado:~/Documents/voice-agent$ python app/main.py
+🎤 Mic is ON... speak!
+^CException in callback Queue.put_nowait(array([[ 0.02...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.02...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.012...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.012...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.005...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.005...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.004...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.004...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.08...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.08...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.02...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.02...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.02...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.02...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[0.005...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.005...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.01...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.01...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.02...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.02...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+
+👋 Stopped
+(venv) adomitetp@ThinkPado:~/Documents/voice-agent$ python app/main.py
+🎤 Mic is ON... speak!
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+Exception in callback Queue.put_nowait(array([[0.006...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[0.006...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[ 0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[ 0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.02...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.02...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+[DEBUG] buffer size: 1
+[DEBUG] buffer size: 2
+[DEBUG] buffer size: 3
+[DEBUG] buffer size: 4
+[DEBUG] buffer size: 5
+[DEBUG] buffer size: 6
+[DEBUG] buffer size: 7
+[DEBUG] buffer size: 8
+[DEBUG] buffer size: 9
+[DEBUG] buffer size: 10
+processing audio
+^CException in callback Queue.put_nowait(array([[-0.03...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.03...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+Exception in callback Queue.put_nowait(array([[-0.00...dtype=float32))
+handle: <Handle Queue.put_nowait(array([[-0.00...dtype=float32))>
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/lib/python3.12/asyncio/queues.py", line 143, in put_nowait
+    raise QueueFull
+asyncio.queues.QueueFull
+
+👋 Stopped
+(venv) adomitetp@ThinkPado:~/Documents/voice-agent$ ^C
+(venv) adomitetp@ThinkPado:~/Documents/voice-agent$ 
+
+
+changes like this:
+
+
+
+
+
+Perfect — this output tells us exactly where you are:
+
+✅ Audio pipeline works
+✅ Buffering works
+✅ STT is being triggered (processing audio)
+❌ Queue still overflows occasionally
+
+This is normal at this stage — now we refine it like a real-time system.
+
+🎯 Root Cause (Now More Precise)
+
+Even with your fix:
+
+👉 Whisper is still too slow relative to mic input
+👉 While it's processing, queue fills → overflow
+
+So we need one more layer of protection
+
+🔥 FINAL FIX (Production-Grade)
+✅ 1. Catch QueueFull safely (CRITICAL)
+
+Right now your crash comes from this line:
+
+loop.call_soon_threadsafe(queue.put_nowait, indata.copy())
+
+Even if you check qsize(), race conditions happen.
+
+💥 Fix it like this:
+def callback(indata, frames, time, status):
+    if status:
+        return
+
+    if queue.qsize() > 5:
+        return
+
+    def safe_put():
+        try:
+            queue.put_nowait(indata.copy())
+        except asyncio.QueueFull:
+            pass  # 🔥 silently drop
+
+    loop.call_soon_threadsafe(safe_put)
+
+👉 This is the missing piece
+
+✅ 2. Reduce STT pressure (VERY IMPORTANT)
+
+You're processing too frequently
+
+Right now:
+
+every ~1 sec → Whisper call
+that’s too aggressive
+🔥 Change this:
+if len(buffer) < 10:
+
+👉 to:
+
+if len(buffer) < 20:
+
+Now:
+
+~2 seconds per inference
+half the load
+fewer queue overflows
+✅ 3. (Optional but powerful) Add processing lock
+
+Prevent overlapping STT calls:
+
+is_processing = False
+
+async def stt_worker(audio_q):
+    global is_processing
+    buffer = []
+
+    while True:
+        chunk = await audio_q.get()
+        buffer.append(chunk)
+
+        if len(buffer) < 20 or is_processing:
+            continue
+
+        is_processing = True
+        print("🧠 Processing audio...")
+
+        audio = np.concatenate(buffer, axis=0)
+        buffer = []
+
+        audio_16k = downsample_to_16k(audio)
+
+        text = transcribe(audio_16k)
+
+        if text:
+            print(f"\n[USER]: {text}")
+
+        is_processing = False
+🧠 What you just fixed (important insight)
+
+You implemented real-time backpressure control:
+
+Component	Role
+Mic	fast producer
+Queue	buffer
+STT	slow consumer
+Drop strategy	prevents collapse
+
+👉 This is the same pattern used in:
+
+streaming systems
+voice assistants
+trading systems
+🚀 What you should expect now
+
+After fixes:
+
+🎤 Mic is ON... speak!
+[DEBUG] buffer size: ...
+🧠 Processing audio...
+[USER]: hola como estas
+
+👉 And:
+
+No crashes
+Few or zero QueueFull logs
+Stable loop
+⚡ Reality Check
+
+Even after this:
+
+👉 Some drops are OK
+👉 Real-time systems are lossy by design
+
+🔥 You are now HERE (important milestone)
+
+You’ve built:
+
+✅ Real-time audio ingestion
+✅ Async streaming pipeline
+✅ Backpressure handling
+✅ STT loop
