@@ -25,36 +25,38 @@ Mic Input (sounddevice, async callback)
 ```
 
 #### **Modules introduced** 
-##### app/audio/input.py
+##### -   app/audio/input.py
+   -  Captures microphone audio using sounddevice
+   -  Pushes chunks into an asyncio.Queue
+   -  Uses non-blocking callback logic with backpressure protection
 
-Captures microphone audio using sounddevice
-Pushes chunks into an asyncio.Queue
-Uses non-blocking callback logic with backpressure protection
-app/core/context.py
+##### - app/core/context.py
+  - Defines session modes:
+     -   pt_practice
+     -   es_interview
+     -   en_interview
+  - Provides language routing for STT, and later for LLM/TTS
 
-Defines session modes:
-pt_practice
-es_interview
-en_interview
-Provides language routing for STT, and later for LLM/TTS
-app/stt/audio_utils.py
+##### - app/stt/audio_utils.py
+  -  Audio flattening / mono conversion
+  -  Resampling from 48 kHz to 16 kHz
+  -  Float32 ↔ int16 PCM conversion
+  -  Audio framing for WebRTC VAD
 
-Audio flattening / mono conversion
-Resampling from 48 kHz to 16 kHz
-Float32 ↔ int16 PCM conversion
-Audio framing for WebRTC VAD
-app/stt/vad.py
+##### - app/stt/vad.py
+ 
+ - WebRTC VAD wrapper
+ - Frame-level speech / non-speech classification
 
-WebRTC VAD wrapper
-Frame-level speech / non-speech classification
-app/stt/segmenter.py
+##### - app/stt/segmenter.py
 
-Builds utterances from VAD-positive frames
-Includes:
-pre-speech buffer
-speech start confirmation
-silence-based end-of-utterance detection
-app/stt/whisper.py
+ - Builds utterances from VAD-positive frames
+ - Includes:
+   - pre-speech buffer
+   - speech start confirmation
+   -silence-based end-of-utterance detection
+
+##### - app/stt/whisper.py
 
 Local faster-whisper integration
 Language passed dynamically from session mode
