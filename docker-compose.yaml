@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  voice-agent:
+    build: .
+    container_name: voice-agent
+    env_file:
+      - .env
+    # give access to your host audio
+    devices:
+      - "/dev/snd:/dev/snd"
+    # Use host networking so PulseAudio socket works
+    network_mode: "host"
+    # Mount your Pulse server socket
+    volumes:
+      - "/run/user/1000/pulse/native:/run/user/1000/pulse/native"
+    environment:
+      # Point inside‐container apps at your host PulseAudio server
+      - PULSE_SERVER=unix:/run/user/1000/pulse/native
+    restart: unless-stopped
