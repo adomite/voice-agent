@@ -10,3 +10,9 @@ numpy
 scipy
 faster-whisper
 webrtcvad-wheels
+
+# TTS
+piper-tts
+
+# memory
+# (no extra deps needed — using stdlib json + pathlib)

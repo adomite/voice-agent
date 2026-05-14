@@ -1,3 +1,11 @@
+from app.memory.memory_manager import (
+    load_conversation_history,
+    save_conversation_history,
+    load_user_profile,
+    record_session,
+    get_profile_context,
+)
+
 SYSTEM_PROMPTS = {
     "language_tutor": {
         "pt": """Você é um tutor de português amigável e paciente.
@@ -210,6 +218,72 @@ class SessionContext:
             "role": "assistant",
             "content": text
         })
+
+    @property
+    def stt_language(self):
+        return self.mode["stt_language"]
+
+    @property
+    def llm_language(self):
+        return self.mode["llm_language"]
+
+    @property
+    def tts_language(self):
+        return self.mode["tts_language"]
+
+    @property
+    def role(self):
+        return self.mode["role"]
+
+    @property
+    def label(self):
+        return self.mode["label"]
+
+
+
+class SessionContext:
+    def __init__(self, mode_name="es_interview"):
+        if mode_name not in SESSION_MODES:
+            valid = list(SESSION_MODES.keys())
+            raise ValueError(f"Unknown mode '{mode_name}'. Valid modes: {valid}")
+        self.mode_name = mode_name
+        self.mode = SESSION_MODES[mode_name]
+        self.conversation_history = []
+        self._init_system_prompt()
+        self._load_memory()
+
+    def _init_system_prompt(self):
+        prompt = SYSTEM_PROMPTS.get(self.role, {}).get(self.llm_language)
+        if prompt:
+            self.conversation_history.append({
+                "role": "system",
+                "content": prompt
+            })
+
+    def _load_memory(self):
+        profile_context = get_profile_context(self.llm_language)
+        if profile_context:
+            self.conversation_history.append({
+                "role": "system",
+                "content": f"User profile from previous sessions:\n{profile_context}"
+            })
+
+    def add_user_message(self, text: str):
+        self.conversation_history.append({
+            "role": "user",
+            "content": text
+        })
+
+    def add_assistant_message(self, text: str):
+        self.conversation_history.append({
+            "role": "assistant",
+            "content": text
+        })
+
+    def close_session(self, summary: str):
+        save_conversation_history(self.mode_name, self.conversation_history)
+        record_session(self.mode_name, summary, self.llm_language)
+        print(f"[MEMORY] session saved for mode: {self.mode_name}")
 
     @property
     def stt_language(self):

@@ -7,6 +7,18 @@ from app.stt.segmenter import WebRTCUtteranceSegmenter
 from app.stt.whisper import transcribe
 from app.stt.postprocess import clean_transcript, should_emit_transcript
 from app.llm.ollama_client import get_llm_response
+from app.tts.piper_tts import speak
+
+END_PHRASES = {
+    "es": ["terminamos", "fin de la entrevista", "hasta luego", "eso es todo"],
+    "en": ["end interview", "we are done", "that's all", "goodbye"],
+    "pt": ["terminamos", "fim da entrevista", "até logo", "é isso"],
+}
+
+
+def is_end_phrase(text: str, language: str) -> bool:
+    text_lower = text.lower().strip()
+    return any(phrase in text_lower for phrase in END_PHRASES.get(language, []))
 
 
 async def stt_consumer(audio_q, session):
@@ -33,18 +45,14 @@ async def stt_consumer(audio_q, session):
 
         if utterance_16k is None:
             continue
-
         if len(utterance_16k) < 8000:
             print("[SKIP] utterance too short")
             continue
 
         print("[PROCESSING] sending utterance to whisper...")
-
         t0 = time.perf_counter()
         raw_text = await asyncio.to_thread(
-            transcribe,
-            utterance_16k,
-            session.stt_language,
+            transcribe, utterance_16k, session.stt_language
         )
         t1 = time.perf_counter()
         print(f"[TIMING] whisper took {t1 - t0:.2f}s")
@@ -58,14 +66,12 @@ async def stt_consumer(audio_q, session):
 
         last_text = text
         print(f"\n[USER]: {text}")
-
         session.add_user_message(text)
 
         print("[PROCESSING] sending to Ollama...")
         t2 = time.perf_counter()
         response = await asyncio.to_thread(
-            get_llm_response,
-            session.conversation_history,
+            get_llm_response, session.conversation_history
         )
         t3 = time.perf_counter()
         print(f"[TIMING] ollama took {t3 - t2:.2f}s")
@@ -73,8 +79,15 @@ async def stt_consumer(audio_q, session):
         session.add_assistant_message(response)
         print(f"\n[AGENT]: {response}\n")
 
+        await asyncio.to_thread(speak, response, session.tts_language)
 
-async def run_pipeline(mode_name="en_interview"):
+        if is_end_phrase(text, session.stt_language):
+            session.close_session(summary=response)
+            print("[SESSION] session closed and saved to memory")
+            break
+
+
+async def run_pipeline(mode_name="es_interview"):
     audio_q = asyncio.Queue(maxsize=20)
     session = SessionContext(mode_name=mode_name)
 
