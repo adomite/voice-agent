@@ -1,13 +1,18 @@
-from livekit.agents import AgentSession, Agent
-from livekit.plugins.openai import OpenAIPlugin
+import asyncio
+from app.pipeline.orchestrator_async import run_pipeline
 
-agent = Agent(
-    instructions="You are a helpful voice assistant."
-)
 
-session = AgentSession(
-    agent=agent,
-    plugins=[OpenAIPlugin()]
-)
+def main():
+    # mode_name = "pt_practice"
+    # later you can switch to:
+    mode_name = "es_interview"
+    # mode_name = "en_interview"
 
-session.run()
+    try:
+        asyncio.run(run_pipeline(mode_name=mode_name))
+    except KeyboardInterrupt:
+        print("\n👋 Stopped")
+
+
+if __name__ == "__main__":
+    main()

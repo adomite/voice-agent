@@ -1,0 +1,12 @@
+# core
+python-dotenv
+openai
+elevenlabs
+
+# audio I/O & processing
+sounddevice
+soundfile
+numpy
+scipy
+faster-whisper
+webrtcvad-wheels

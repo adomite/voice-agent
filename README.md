@@ -24,6 +24,21 @@ Mic Input (sounddevice, async callback)
   -> console output
 ```
 
+#### **HOw to start running**
+```text
+With venv
+cd ~//voice-agent
+source venv/bin/activate
+python -m app.main
+
+with Docker
+cd ~//voice-agent
+docker compose up
+
+docker compose up --build
+
+```
+
 #### **Modules introduced** 
 ##### -   app/audio/input.py
    -  Captures microphone audio using sounddevice

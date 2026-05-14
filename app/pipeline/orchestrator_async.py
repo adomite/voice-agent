@@ -6,11 +6,12 @@ from app.core.context import SessionContext
 from app.stt.segmenter import WebRTCUtteranceSegmenter
 from app.stt.whisper import transcribe
 from app.stt.postprocess import clean_transcript, should_emit_transcript
+from app.llm.ollama_client import get_llm_response
 
 
 async def stt_consumer(audio_q, session):
     segmenter = WebRTCUtteranceSegmenter(
-        input_sample_rate=48000,
+        input_sample_rate=16000,
         target_sample_rate=16000,
         frame_ms=30,
         vad_aggressiveness=2,
@@ -46,17 +47,31 @@ async def stt_consumer(audio_q, session):
             session.stt_language,
         )
         t1 = time.perf_counter()
-
         print(f"[TIMING] whisper took {t1 - t0:.2f}s")
 
         text = clean_transcript(raw_text)
 
-        if should_emit_transcript(text, last_text):
-            print(f"\n[USER]: {text}")
-            last_text = text
-        else:
+        if not should_emit_transcript(text, last_text):
             if text:
                 print(f"[FILTERED]: {text}")
+            continue
+
+        last_text = text
+        print(f"\n[USER]: {text}")
+
+        session.add_user_message(text)
+
+        print("[PROCESSING] sending to Ollama...")
+        t2 = time.perf_counter()
+        response = await asyncio.to_thread(
+            get_llm_response,
+            session.conversation_history,
+        )
+        t3 = time.perf_counter()
+        print(f"[TIMING] ollama took {t3 - t2:.2f}s")
+
+        session.add_assistant_message(response)
+        print(f"\n[AGENT]: {response}\n")
 
 
 async def run_pipeline(mode_name="en_interview"):

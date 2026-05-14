@@ -9,6 +9,8 @@ RUN apt-get update \
       libsndfile1 \
       portaudio19-dev \
       pulseaudio-utils \
+      gcc \
+      python3-dev \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
