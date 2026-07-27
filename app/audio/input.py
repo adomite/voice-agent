@@ -17,12 +17,24 @@ def find_input_device():
     raise RuntimeError("No input device found")
 
 
+def _resolve_latency():
+    raw = os.environ.get('AUDIO_LATENCY')
+    if raw is None:
+        return None
+    try:
+        return float(raw)
+    except ValueError:
+        return raw  # e.g. 'low' / 'high', passed through to PortAudio
+
+
 async def audio_producer(queue):
     loop = asyncio.get_event_loop()
     device = find_input_device()
 
     channels = 2 if isinstance(device, str) else max(1, sd.query_devices(device)['max_input_channels'])
     samplerate = int(os.environ.get('AUDIO_SAMPLE_RATE', 48000))
+    blocksize_ms = float(os.environ.get('AUDIO_BLOCKSIZE_MS', 100))
+    latency = _resolve_latency()
 
     def callback(indata, frames, time, status):
         if status:
@@ -43,16 +55,21 @@ async def audio_producer(queue):
 
         loop.call_soon_threadsafe(safe_put)
 
-    print(f"[AUDIO] opening stream: device={device} samplerate={samplerate} channels={channels}")
+    print(f"[AUDIO] opening stream: device={device} samplerate={samplerate} channels={channels} "
+          f"blocksize_ms={blocksize_ms} latency={latency!r}")
 
-    stream = sd.InputStream(
+    stream_kwargs = dict(
         device=device,
         samplerate=samplerate,
         channels=channels,
         dtype="float32",
-        blocksize=int(samplerate * 0.1),  # 100ms chunks
-        callback=callback
+        blocksize=int(samplerate * (blocksize_ms / 1000)),
+        callback=callback,
     )
+    if latency is not None:
+        stream_kwargs["latency"] = latency
+
+    stream = sd.InputStream(**stream_kwargs)
 
     with stream:
         print("🎤 Mic is ON... speak!")
