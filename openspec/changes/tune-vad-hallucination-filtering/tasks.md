@@ -1,18 +1,18 @@
 ## 1. Postprocess filtering (`app/stt/postprocess.py`)
 
-- [ ] 1.1 Add a repetition-loop check: reject transcripts where the most common word accounts for more than a conservative threshold (e.g. ≥50%) of total words, with a minimum repeat count (e.g. ≥4) to avoid false positives on short transcripts.
-- [ ] 1.2 Add a small, explicit blocklist of known canned Whisper hallucination phrases (starting with "subtítulos por la comunidad de amara.org" and "¡suscríbete!"/"suscríbete", case-insensitive, matched when they make up the sole/near-sole content of the transcript) and reject exact/near matches.
-- [ ] 1.3 Wire both checks into `should_emit_transcript`, alongside the existing short-word filter.
+- [x] 1.1 Added as a phrase-repetition check (`is_repetition_loop`, regex-based: a 1-5 word phrase repeating 3+ times consecutively) rather than pure single-word dominance — generalizes to catch observed multi-word loops too (e.g. "¡Vamos a ir!" x5), which a single-word-only check would have missed. Verified in isolation against all 5 real hallucination transcripts from the ThinkPad logs plus genuine longer phrases (see commit).
+- [x] 1.2 Added `is_known_hallucination` with a small normalized blocklist ("subtítulos por la comunidad de amara.org", "¡suscríbete!"/"suscríbete"). Verified against the real logged hallucinations.
+- [x] 1.3 Wired both into `should_emit_transcript`, alongside the existing short-word filter.
 
 ## 2. VAD/segmenter tuning (`app/stt/segmenter.py`)
 
-- [ ] 2.1 Increase `min_speech_frames` from 6 to a higher value (start at 9-10, ~270-300ms) to require a longer sustained speech run before accepting an utterance.
+- [x] 2.1 Increased `min_speech_frames` from 6 to 9 (~270ms) in both the class default (`segmenter.py`) and the call site (`orchestrator_async.py`'s `stt_consumer`, which passes it explicitly).
 - [ ] 2.2 If 2.1 alone doesn't sufficiently reduce false-positive triggers during testing, evaluate raising `vad_aggressiveness` from 2 to 3 as a fallback.
 
 ## 3. Verification — ThinkPad (primary target)
 
 - [ ] 3.1 Run several sessions on the ThinkPad (quiet room and with typical background noise) and confirm hallucinated transcripts ("¡Suscríbete!", "Subtítulos por la comunidad de Amara.org", repetition loops) no longer appear as `[USER]` output.
-- [ ] 3.2 Confirm genuine short replies ("sí", "no", "ok") are still captured and transcribed correctly — not accidentally filtered by the tightened `min_speech_frames` or the new postprocess checks.
+- [ ] 3.2 **Found during implementation, not yet resolved**: "sí"/"no"/"ok" are rejected by the pre-existing `is_unstable_short_utterance` filter (any single word ≤3 chars), unrelated to and unaffected by this change's new filters — this was already true before this change, so it's not a regression, but it means the spec's "genuine short utterances are preserved" scenario doesn't hold for single-word replies this short. Verify longer short replies (e.g. "claro", "vale") aren't affected instead, and decide separately whether to loosen the short-word filter (out of this change's original scope).
 - [ ] 3.3 Confirm normal-length genuine utterances are unaffected (no new false negatives).
 
 ## 4. Verification — MSI (regression check)

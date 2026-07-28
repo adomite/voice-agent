@@ -15,7 +15,7 @@ class WebRTCUtteranceSegmenter:
         start_speech_frames=3,
         end_silence_frames=12,
         pre_speech_frames=6,
-        min_speech_frames=6,
+        min_speech_frames=9,
     ):
         self.input_sample_rate = input_sample_rate
         self.target_sample_rate = target_sample_rate

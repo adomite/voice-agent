@@ -30,7 +30,7 @@ async def stt_consumer(audio_q, session, tts_active):
         start_speech_frames=3,
         end_silence_frames=14,
         pre_speech_frames=6,
-        min_speech_frames=6,
+        min_speech_frames=9,
     )
 
     last_text = ""
