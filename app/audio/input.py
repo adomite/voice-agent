@@ -28,11 +28,29 @@ def _resolve_latency():
         return raw  # e.g. 'low' / 'high', passed through to PortAudio
 
 
+def _resolve_channels(device):
+    # Historically this forced 2 channels for string devices (e.g. 'default')
+    # and downmixed to mono in the callback via indata.mean(axis=1). That
+    # downmix silently attenuates the signal whenever the two mic channels
+    # aren't perfectly in-phase (common for laptop dual-mic arrays doing
+    # noise cancellation) -- confirmed the 'default' PipeWire device accepts
+    # a direct mono InputStream, so request mono up front instead and skip
+    # the averaging step entirely.
+    try:
+        probe = sd.InputStream(device=device, channels=1, dtype="float32")
+        probe.close()
+        return 1
+    except Exception:
+        if isinstance(device, str):
+            return 2
+        return max(1, sd.query_devices(device)['max_input_channels'])
+
+
 async def audio_producer(queue, tts_active: asyncio.Event, discard_next_utterance: asyncio.Event):
     loop = asyncio.get_event_loop()
     device = find_input_device()
 
-    channels = 2 if isinstance(device, str) else max(1, sd.query_devices(device)['max_input_channels'])
+    channels = _resolve_channels(device)
     samplerate = int(os.environ.get('AUDIO_SAMPLE_RATE', 48000))
     blocksize_ms = float(os.environ.get('AUDIO_BLOCKSIZE_MS', 100))
     latency = _resolve_latency()

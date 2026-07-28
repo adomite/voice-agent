@@ -37,12 +37,14 @@
 
 ## 8. Verification — ThinkPad, round 4 (with the sample-rate fix)
 
-- [ ] 8.1 Listen to a freshly-saved `DEBUG_SAVE_UTTERANCES=1` WAV and confirm it now plays back at normal speed/pitch, matching what was actually said.
-- [ ] 8.2 Live session: confirm `[USER]` transcripts now match what was said, and confirm whether the settle-window/discard-first-utterance machinery from sections 3-5 is still needed at this reduced severity, or can be scaled back (e.g. shorter `AUDIO_RESUME_SETTLE_MS`) now that VAD is analyzing correctly-labeled audio.
-- [ ] 8.3 Repeat the A/B test once more (record + direct transcript vs. live pipeline) to confirm both fully match.
-- [ ] 8.4 Confirm this doesn't regress the overflow fix or the hallucination filtering from the other changes (run a normal multi-turn session end to end).
-- [ ] 8.5 Remove or otherwise clean up the temporary `DEBUG_SAVE_UTTERANCES` diagnostic once no longer needed (or leave it, off by default, as a permanent debugging aid — decide during this verification pass).
+- [x] 8.1 Listened to a freshly-saved `DEBUG_SAVE_UTTERANCES=1` WAV — confirmed correct sample rate/pitch after Resolution update 2, but revealed a new problem: audio was clean but very quiet (rms≈623, peak≈2471 / 32767) — too quiet to reliably transcribe or hear. Led to Resolution update 3 (channel-downmix cancellation + ALSA hardware gain).
+- [x] 8.2 Live session with the round-3 fix (`_resolve_channels` mono capture + `amixer -c 0 sset Capture 70%`): `[USER]` transcripts now match what was said exactly ("La silla está rota.", "Necesito comprar una mesa."). Settle-window/discard-first-utterance machinery (sections 3-5) left as-is — still needed and working (`[SKIP] discarding first utterance after resume` fires correctly each resume) — not scaled back in this pass.
+- [x] 8.3 Superseded by the live multi-turn test in 8.2, which is a stronger signal than a single A/B replay: multiple consecutive utterances transcribed correctly end-to-end through the real pipeline (segmenter → Whisper → Ollama → TTS), not just recorded-vs-live equivalence for one clip.
+- [x] 8.4 Confirmed no regression: overflow-free (no `[AUDIO STATUS]` overflow messages), and `tune-vad-hallucination-filtering`'s filter correctly caught `¡Suscríbete!` hallucinations between real utterances (`[FILTERED]` lines) without blocking real speech.
+- [ ] 8.5 Decide whether to remove `DEBUG_SAVE_UTTERANCES` — leaving it in for now (off by default, zero cost when unset) since it was essential for finding both round-3 causes; revisit if it becomes clutter.
+- [ ] 8.6 Persist the ALSA `Capture` gain setting (currently session-only, lost on reboot) via `sudo alsactl store` after setting it with `amixer`, or document the `amixer -c 0 sset Capture 70%` command as a required one-time-per-boot step in the README's ThinkPad setup section.
 
 ## 9. Verification — MSI (regression check)
 
 - [ ] 9.1 Run a session on the MSI and confirm transcription quality is at least as good as before this change. Note: MSI's `AUDIO_SAMPLE_RATE=16000` (per its `docker-compose.yml`), so the same hardcoded-16000 bug was accidentally a no-op *correctly* there — this fix should be a no-op change for MSI's behavior, not a regression risk.
+- [ ] 9.2 New risk from Resolution update 3: `_resolve_channels()` now probes the device with a live `sd.InputStream(channels=1, ...)` open/close before opening the real stream. Confirm this probe-then-open pattern doesn't fail or misbehave under Docker's audio passthrough on the MSI (e.g. device busy/exclusive-access errors) — if it does, `_resolve_channels` falls back to the old stereo+average behavior for non-string devices, but this path is untested on MSI's actual device config.

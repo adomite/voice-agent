@@ -79,6 +79,20 @@ python main.py en_interview
 
 **Known CPU limitation**: Whisper inference on this machine (4-core i7-8550U, `small` model, int8, CPU) takes roughly 2.1–2.6s per utterance — noticeably slower than the GPU-assisted MSI setup. This is expected and doesn't cause input overflow by itself; overflow was previously caused by using `hw:0,0` (raw ALSA device) for `AUDIO_INPUT_DEVICE` rather than by Whisper's timing — see `openspec/changes/fix-audio-input-overflow-cpu/` for the full diagnosis.
 
+**Required one-time mic gain fix (per boot, until persisted)**: on this hardware the raw ALSA `Capture` mixer defaults to 100% (+30dB), which clips speech and raises the noise floor enough that the VAD never detects silence (utterances hang and never end). Run this once per boot before starting a session:
+
+```bash
+amixer -c 0 sset Capture 70%
+```
+
+To persist across reboots instead of running it every time:
+
+```bash
+sudo alsactl store
+```
+
+See `openspec/changes/fix-chunked-resample-audio-corruption/design.md` (Resolution update 3) for how this was diagnosed.
+
 ### MSI (Docker, GPU)
 
 Ollama must be running on the **host** (not in the container) before starting the agent:
