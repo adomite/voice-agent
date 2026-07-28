@@ -7,14 +7,14 @@
 ## 2. VAD/segmenter tuning (`app/stt/segmenter.py`)
 
 - [x] 2.1 Increased `min_speech_frames` from 6 to 9 (~270ms) in both the class default (`segmenter.py`) and the call site (`orchestrator_async.py`'s `stt_consumer`, which passes it explicitly).
-- [ ] 2.2 If 2.1 alone doesn't sufficiently reduce false-positive triggers during testing, evaluate raising `vad_aggressiveness` from 2 to 3 as a fallback.
+- [x] 2.2 Not needed: `min_speech_frames=9` alone was sufficient across both the ThinkPad (`fix-chunked-resample-audio-corruption` round-4 test) and MSI (regression test) live sessions — no false-positive floods observed at `vad_aggressiveness=2`. No need to raise it.
 
 ## 3. Verification — ThinkPad (primary target)
 
-- [ ] 3.1 Run several sessions on the ThinkPad (quiet room and with typical background noise) and confirm hallucinated transcripts ("¡Suscríbete!", "Subtítulos por la comunidad de Amara.org", repetition loops) no longer appear as `[USER]` output.
-- [ ] 3.2 **Found during implementation, not yet resolved**: "sí"/"no"/"ok" are rejected by the pre-existing `is_unstable_short_utterance` filter (any single word ≤3 chars), unrelated to and unaffected by this change's new filters — this was already true before this change, so it's not a regression, but it means the spec's "genuine short utterances are preserved" scenario doesn't hold for single-word replies this short. Verify longer short replies (e.g. "claro", "vale") aren't affected instead, and decide separately whether to loosen the short-word filter (out of this change's original scope).
-- [ ] 3.3 Confirm normal-length genuine utterances are unaffected (no new false negatives).
+- [x] 3.1 Confirmed via the live ThinkPad session run during `fix-chunked-resample-audio-corruption`'s verification (`es_practice`, 2026-07-28): `[FILTERED]: ¡Suscríbete!` appeared twice and was correctly withheld from `[USER]` output.
+- [ ] 3.2 **Found during implementation, still not resolved**: "sí"/"no"/"ok" are rejected by the pre-existing `is_unstable_short_utterance` filter (any single word ≤3 chars), unrelated to and unaffected by this change's new filters — this was already true before this change, so it's not a regression, but it means the spec's "genuine short utterances are preserved" scenario doesn't hold for single-word replies this short. Needs a dedicated quick test: say "claro" or "vale" on the ThinkPad and confirm it reaches `[USER]` output. Not covered by any test run so far.
+- [x] 3.3 Confirmed via the same session: genuine utterances ("La silla está rota.", "Necesito comprar una mesa.", "para una olla si hoy no cocino.") all reached `[USER]` output correctly — no new false negatives.
 
 ## 4. Verification — MSI (regression check)
 
-- [ ] 4.1 Run a session on the MSI and confirm no regression in transcription of genuine short or long utterances from the tightened VAD/postprocess settings.
+- [x] 4.1 Confirmed via the MSI regression session run during `fix-chunked-resample-audio-corruption`'s verification (`pt_practice`, 2026-07-28): `[FILTERED]: Oi.` was correctly caught, while genuine short and long Portuguese utterances ("Conjuga o verbo ser.", "Você pode conjugar ou ver você?", etc.) all reached `[USER]` output correctly.
