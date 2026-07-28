@@ -1,4 +1,5 @@
 import os
+import time
 import numpy as np
 import sounddevice as sd
 import asyncio
@@ -36,9 +37,16 @@ async def audio_producer(queue, tts_active: asyncio.Event):
     blocksize_ms = float(os.environ.get('AUDIO_BLOCKSIZE_MS', 100))
     latency = _resolve_latency()
 
-    def callback(indata, frames, time, status):
+    mute_until = 0.0
+
+    def callback(indata, frames, time_info, status):
         if status:
             print(f"[AUDIO STATUS] {status}")
+        if time.monotonic() < mute_until:
+            # Resuming the stream after TTS can produce a brief hardware
+            # pop/transient; drop it instead of letting the VAD treat it
+            # as speech.
+            return
         if queue.qsize() > 10:
             return
 
@@ -71,6 +79,7 @@ async def audio_producer(queue, tts_active: asyncio.Event):
 
     stream = sd.InputStream(**stream_kwargs)
     cooldown_s = float(os.environ.get('TTS_COOLDOWN_MS', 250)) / 1000
+    settle_s = float(os.environ.get('AUDIO_RESUME_SETTLE_MS', 300)) / 1000
 
     with stream:
         print("🎤 Mic is ON... speak!")
@@ -87,6 +96,10 @@ async def audio_producer(queue, tts_active: asyncio.Event):
                     try:
                         stream.start()
                         capturing = True
+                        # Ignore audio for a short settle window: restarting
+                        # the stream can produce a hardware pop/transient
+                        # that the VAD would otherwise mistake for speech.
+                        mute_until = time.monotonic() + settle_s
                     except Exception as exc:
                         print(f"[AUDIO] failed to resume capture, will retry: {exc}")
             await asyncio.sleep(0.05)
