@@ -79,9 +79,17 @@ async def audio_producer(queue, tts_active: asyncio.Event):
 
     stream = sd.InputStream(**stream_kwargs)
     cooldown_s = float(os.environ.get('TTS_COOLDOWN_MS', 250)) / 1000
-    settle_s = float(os.environ.get('AUDIO_RESUME_SETTLE_MS', 300)) / 1000
+    # Opening/restarting the stream produces several seconds of clipped,
+    # DC-biased audio before it settles (confirmed via direct measurement:
+    # peak=32768 and a large decaying DC offset for ~3-4s after open).
+    # 300ms was nowhere near enough; this covers both the very first open
+    # and every resume after a TTS pause.
+    settle_s = float(os.environ.get('AUDIO_RESUME_SETTLE_MS', 4000)) / 1000
 
     with stream:
+        print(f"[AUDIO] settling for {settle_s:.1f}s before capture starts...")
+        mute_until = time.monotonic() + settle_s
+        await asyncio.sleep(settle_s)
         print("🎤 Mic is ON... speak!")
         capturing = True
         while True:

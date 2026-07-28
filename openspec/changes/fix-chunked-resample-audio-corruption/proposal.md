@@ -20,8 +20,8 @@ Root cause: `app/stt/segmenter.py`'s `WebRTCUtteranceSegmenter.process_chunk()` 
 
 ## Impact
 
-- Code: `app/stt/segmenter.py` only (`WebRTCUtteranceSegmenter`). No changes to `app/stt/audio_utils.py`, `app/stt/vad.py`, `app/audio/input.py`, or `app/pipeline/orchestrator_async.py`.
-- No new env vars.
-- This is unrelated to and independent of the archived overflow fixes and the in-progress `tune-vad-hallucination-filtering` change — all three are separate root causes for what looked like one "bad transcription" symptom.
+- Code: `app/stt/segmenter.py` (`WebRTCUtteranceSegmenter`, the chunked-resampling fix), and `app/audio/input.py` (added per the design.md Resolution update — the mute/settle window that turned out to be the dominant fix, see below). No changes to `app/stt/audio_utils.py`, `app/stt/vad.py`, or `app/pipeline/orchestrator_async.py`.
+- `AUDIO_RESUME_SETTLE_MS` (already introduced by the archived `fix-tts-audio-duplex-overflow`) default raised from 300 to 4000, and now also applied at initial stream open, not just TTS-resume — see design.md for the measured clipping/DC-offset data behind this.
+- This is unrelated to and independent of the archived overflow fixes and the in-progress `tune-vad-hallucination-filtering` change — all are separate root causes for what looked like one "bad transcription" symptom. The chunked-resampling fix (segmenter.py) is a real, kept improvement, but live retesting showed it was not the dominant cause — see design.md's Resolution update for the actual dominant cause (a multi-second capture-warmup transient) and its fix.
 - Verification: primarily on the ThinkPad (where this was found), with a clear-speech A/B comparison (live pipeline transcript vs. direct-file transcript of the same utterance) as the acceptance test, plus a quick MSI regression check.
 - Non-goal: this does not touch VAD sensitivity or hallucination-phrase filtering (`tune-vad-hallucination-filtering`'s concern) — that remains a separate, still-relevant change for audio that's genuinely ambiguous/silent, as opposed to this bug, which corrupts audio that was never ambiguous in the first place.
