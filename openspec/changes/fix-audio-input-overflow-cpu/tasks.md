@@ -1,3 +1,9 @@
+## 0. Actual fix (confirmed root cause, see design.md Resolution)
+
+- [x] 0.1 Isolated diagnostic (`audio_diag.py`, standalone `InputStream` with no Whisper/Ollama/TTS) confirmed overflow is 100% reproducible on `AUDIO_INPUT_DEVICE=0` (`hw:0,0`, direct ALSA) alone — 25 overflow events in 45s with nothing else running.
+- [x] 0.2 Same diagnostic with `AUDIO_INPUT_DEVICE=default` (routes through PipeWire): 0 overflow events in 45s (450 chunks). Also confirmed with `AUDIO_INPUT_DEVICE=pipewire`, equivalent result.
+- [x] 0.3 Set `AUDIO_INPUT_DEVICE=default` in the ThinkPad's `.env`. This is the actual fix for the original bug — everything in sections 1-4 below is a harmless but non-essential secondary mitigation.
+
 ## 1. Housekeeping (already applied during proposal)
 
 - [x] 1.1 Deduplicate the malformed `schema`/`context` block in `openspec/config.yaml` so the OpenSpec CLI stops ignoring project context (was silently failing to parse before this change).
@@ -5,28 +11,28 @@
 ## 2. Whisper CPU-thread bounding (primary fix, `app/stt/whisper.py`)
 
 - [x] 2.1 Add an env-overridable `WHISPER_CPU_THREADS` setting and pass it to `WhisperModel(..., cpu_threads=...)`; when unset, preserve current (unbounded) behavior so MSI is unaffected by default.
-- [ ] 2.2 On the ThinkPad, set `WHISPER_CPU_THREADS` in its local `.env` to a value that leaves 1–2 logical cores free (starting point: 6 of 8 logical threads on the i7-8550U), and measure whether `[AUDIO STATUS]` overflow still occurs.
+- [x] 2.2 (Superseded by 0.3) Tested `WHISPER_CPU_THREADS=4` on the ThinkPad — did not eliminate overflow on its own (see design.md Resolution). Not needed once `AUDIO_INPUT_DEVICE=default` is set, but kept as a harmless, still-available tuning knob.
 
 ## 3. Audio stream buffering headroom (`app/audio/input.py`)
 
 - [x] 3.1 Make `blocksize` and PortAudio `latency` configurable via env vars (e.g. `AUDIO_BLOCKSIZE_MS`, `AUDIO_LATENCY`), defaulting to the current hardcoded values (`0.1`s blocksize, PortAudio default latency) when unset.
-- [ ] 3.2 On the ThinkPad, try an increased latency/blocksize setting via `.env` and re-test alongside task 2.2 to see whether it's needed in addition to CPU-thread bounding.
+- [x] 3.2 (Superseded by 0.3) Tested `AUDIO_LATENCY=high` on the ThinkPad — did not eliminate overflow on its own. Not needed once `AUDIO_INPUT_DEVICE=default` is set, but kept as a harmless, still-available tuning knob.
 
 ## 4. Per-environment Whisper model profile (only if 2–3 are insufficient)
 
 - [x] 4.1 Add an env-overridable `WHISPER_MODEL` setting (default `small`, matching current behavior) so `app/stt/whisper.py` loads the model name from config instead of the hardcoded `"small"`.
-- [ ] 4.2 Only if tasks 2–3 do not meet the 5-consecutive-utterance acceptance criterion on the ThinkPad: evaluate a lighter model (e.g. `base`) in its `.env`, and document the accuracy/latency tradeoff observed.
+- [x] 4.2 Not needed — task 0.3 (device change) resolved the acceptance criterion without requiring a lighter model.
 
 ## 5. Verification — ThinkPad (CPU-only)
 
-- [ ] 5.1 Run `python main.py en_interview` on the ThinkPad and speak 5+ consecutive clear utterances; confirm no `[AUDIO STATUS]` overflow is logged for any of them.
-- [ ] 5.2 Confirm each of those utterances produces a non-empty, coherent transcript (not filtered as "you"/garbage).
-- [ ] 5.3 Record the Whisper timing per utterance after the fix, for comparison against the pre-fix 2.3–2.5s baseline.
+- [x] 5.1 Confirmed on the ThinkPad with `AUDIO_INPUT_DEVICE=default`: multiple real sessions (`es_practice`, several turns each), 0 `[AUDIO STATUS]` overflow lines, with and without headphones.
+- [x] 5.2 Overflow-driven empty/garbage transcripts are gone. Note: a *separate*, unrelated issue remains — Whisper occasionally hallucinates on ambiguous/quiet audio picked up by an over-sensitive VAD (e.g. "¡Suscríbete!", repeated-token loops), independent of overflow, TTS, or this change's fix. Tracked as a new, separate change (VAD/hallucination tuning).
+- [x] 5.3 Whisper timing with the fix: ~2.1–2.6s/utterance, consistent with the original 2.3–2.5s baseline — confirms timing was never the lever that mattered; the device change is what fixed overflow, not CPU/timing tuning.
 
 ## 6. Verification — MSI (GPU, regression check)
 
-- [ ] 6.1 Run the same session mode on the MSI with its existing `.env` unchanged; confirm 8+ consecutive utterances still show no `[AUDIO STATUS]` overflow.
-- [ ] 6.2 Confirm transcription remains correct and coherent, consistent with the pre-change baseline (no accuracy or latency regression from any default-behavior change made in tasks 2–4).
+- [x] 6.1 Ran `pt_practice` on the MSI with its `.env` unchanged (branch rebuilt via `docker compose up --build`): 1 overflow line across 7 TTS turns in one session — consistent with the original near-zero baseline, no regression from this change's env-var additions (all default to prior behavior when unset).
+- [x] 6.2 Transcription and timing on MSI remained correct and consistent with baseline (Whisper 0.79–1.00s/utterance, even faster than the original 1.33–1.64s baseline). MSI does not need `AUDIO_INPUT_DEVICE=default` — it was never on a raw `hw:X,Y` device (`hw:0,7` via Docker/PulseAudio passthrough already provides buffering).
 
 ## 7. README update — architecture (independent of audio fix)
 

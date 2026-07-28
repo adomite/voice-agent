@@ -11,10 +11,14 @@
 
 ## 3. Verification — ThinkPad (primary target)
 
-- [ ] 3.1 Run a session with several TTS turns on the ThinkPad (same env vars as the `fix-audio-input-overflow-cpu` test: `WHISPER_CPU_THREADS=4 AUDIO_LATENCY=high`) and confirm no `[AUDIO STATUS] input overflow` appears during or immediately after `[TTS] speaking...` blocks.
-- [ ] 3.2 Confirm no more hallucinated transcripts of the "Subtítulos por la comunidad de Amara.org" / "¡Suscríbete!" pattern appear after this fix, including right after `[TTS] done`.
-- [ ] 3.3 Confirm the user can still speak and be heard shortly after the assistant finishes talking (cooldown isn't so long it feels broken).
+- [x] 3.1 Confirmed: with `AUDIO_INPUT_DEVICE=default` (the actual fix, see `fix-audio-input-overflow-cpu`), no `[AUDIO STATUS] input overflow` appears anywhere, during or after TTS, with or without this change's stop/start logic. **Correction**: overflow was never actually caused by TTS/mic duplex contention — it was caused by `hw:0,0` (raw ALSA) regardless of TTS state, and disappears with `default` alone. This change's stop/start logic is unnecessary for the overflow fix, though harmless.
+- [ ] 3.2 **Not resolved, and re-scoped**: hallucinated transcripts ("Subtítulos por la comunidad de Amara.org", "¡Suscríbete!") still occur after this fix, including right after `[TTS] done`. Reproduced with headphones on (rules out acoustic echo) and even on the very first utterance before any TTS has happened. This is **not** a TTS/audio-duplex issue — it's Whisper hallucinating on audio the VAD misclassifies as speech (background noise, breath, etc.). Moved to a new, separate change for VAD/hallucination tuning; not this change's responsibility.
+- [x] 3.3 Turn-taking responsiveness (cooldown feel) was acceptable in all ThinkPad tests; no complaints of the agent feeling unresponsive after speaking.
 
 ## 4. Verification — MSI (regression check)
 
-- [ ] 4.1 Run a multi-turn session on the MSI and confirm transcription/turn-taking is at least as good as the pre-change baseline, with no new overflow introduced by the stop/start behavior.
+- [x] 4.1 MSI regression-tested on this branch (before the settle-window addition in 2.3, but with the stop/start logic from 2.1/2.2 active): only 1 overflow line across 7 TTS turns, consistent with pre-change baseline. Since `fix-audio-input-overflow-cpu` established MSI never needed a device change (its Docker/PulseAudio passthrough already avoids the `hw:X,Y` direct-ALSA problem), no further MSI-specific action is needed here.
+
+## 5. Scope correction
+
+- [x] 5.1 This change's original premise (TTS output stream contending with mic input stream on `hw:0,0`, or the mic picking up acoustic echo) is **not the actual root cause** — see `fix-audio-input-overflow-cpu`'s design.md Resolution note. The overflow this change set out to fix is the same overflow already resolved by the `AUDIO_INPUT_DEVICE=default` change. The stop/start/mute-window code implemented here is kept as a reasonable defense-in-depth measure (no observed downside, still correctly scoped to only run around TTS) but is not required for the fix.

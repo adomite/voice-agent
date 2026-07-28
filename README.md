@@ -53,15 +53,17 @@ pip install -r requirements.txt
 Relevant `.env` variables:
 
 ```bash
-AUDIO_INPUT_DEVICE=hw:0,0
+AUDIO_INPUT_DEVICE=default
 AUDIO_SAMPLE_RATE=48000
 OLLAMA_MODEL=llama3.2:1b
 OLLAMA_BASE_URL=http://127.0.0.1:11434/v1
-# Optional, CPU-only tuning (see "Known limitations" below):
+# Optional, CPU tuning (harmless, not required for the overflow fix below):
 # WHISPER_CPU_THREADS=6
 # AUDIO_BLOCKSIZE_MS=100
 # AUDIO_LATENCY=high
 ```
+
+**Important**: use `AUDIO_INPUT_DEVICE=default`, not a raw `hw:X,Y` string or numeric PortAudio index. On this hardware, `hw:0,0` is direct ALSA access with no software buffering and reliably overflows (confirmed with an isolated capture-only test, independent of Whisper/Ollama/TTS); `default` routes through PipeWire, which fixes it completely. Run `python -c "import sounddevice as sd; print(sd.query_devices())"` to see the device list if you need to confirm the mapping on a given machine.
 
 Before starting a session, confirm Ollama is running:
 
@@ -75,7 +77,7 @@ Then run a session:
 python main.py en_interview
 ```
 
-**Known CPU limitation**: Whisper inference on this machine (4-core i7-8550U, `small` model, int8, CPU) takes roughly 2.3–2.5s per utterance — noticeably slower than the GPU-assisted MSI setup. Combined with `hw:0,0` being a direct ALSA device with no software buffering, this made input overflow common on longer sessions. The `WHISPER_CPU_THREADS` / `AUDIO_BLOCKSIZE_MS` / `AUDIO_LATENCY` env vars above give headroom to mitigate this; see `openspec/changes/fix-audio-input-overflow-cpu/` for the full diagnosis and fix rationale.
+**Known CPU limitation**: Whisper inference on this machine (4-core i7-8550U, `small` model, int8, CPU) takes roughly 2.1–2.6s per utterance — noticeably slower than the GPU-assisted MSI setup. This is expected and doesn't cause input overflow by itself; overflow was previously caused by using `hw:0,0` (raw ALSA device) for `AUDIO_INPUT_DEVICE` rather than by Whisper's timing — see `openspec/changes/fix-audio-input-overflow-cpu/` for the full diagnosis.
 
 ### MSI (Docker, GPU)
 

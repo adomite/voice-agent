@@ -1,4 +1,12 @@
-## Context
+## Resolution (confirmed root cause, supersedes the analysis below)
+
+Empirical testing on the ThinkPad — including an isolated diagnostic script that opened only the raw `sounddevice.InputStream` with zero Whisper/Ollama/TTS involved — showed input overflow occurring at a steady rate (25 events in 45s) purely from opening `AUDIO_INPUT_DEVICE=0` (which resolves to `hw:0,0`, direct ALSA hardware access with no software buffering). Switching only the device to `AUDIO_INPUT_DEVICE=default` (routes through PipeWire, which provides buffer elasticity) eliminated overflow completely in the same isolated test (0/450 chunks) and in the full pipeline across multiple real sessions, with and without headphones, with and without `WHISPER_CPU_THREADS`/`AUDIO_LATENCY` set.
+
+This means the CPU-thread-contention mechanism analyzed below, while a plausible and not-unreasonable hypothesis given the timing correlation in the original diagnosis, **was not the actual root cause**. The overflow was present unconditionally on `hw:0,0`, independent of Whisper CPU load, TTS, or anything else in the pipeline. The fix that actually resolved the acceptance criteria is a one-line `.env` change (`AUDIO_INPUT_DEVICE=default` instead of `0`), not the thread-bounding/buffering knobs implemented below.
+
+Those knobs (`WHISPER_CPU_THREADS`, `WHISPER_MODEL`, `AUDIO_BLOCKSIZE_MS`, `AUDIO_LATENCY`) are kept — they're harmless, default to prior behavior when unset, and remain generically useful for CPU/latency tuning — but they are no longer positioned as *the* fix. The design and decisions below are preserved as a record of the investigation, not as the current explanation.
+
+## Context (original analysis, see Resolution above)
 
 `app/pipeline/orchestrator_async.py` already runs Whisper transcription, the Ollama call, and Piper TTS via `asyncio.to_thread(...)` (see `stt_consumer`). This means the asyncio event loop itself is not literally blocked while Whisper runs — `to_thread` hands the call to a worker thread, and `ctranslate2` (the `faster-whisper` backend) releases the GIL during native inference, so the event loop keeps servicing `audio_producer`'s `call_soon_threadsafe` callbacks normally.
 

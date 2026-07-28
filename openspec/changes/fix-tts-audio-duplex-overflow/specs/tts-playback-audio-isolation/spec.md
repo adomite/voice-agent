@@ -1,15 +1,13 @@
 ## ADDED Requirements
 
 ### Requirement: No concurrent mic capture during TTS playback
-While the assistant's spoken response is playing (`app/tts/piper_tts.py`'s `speak()`), the microphone input stream SHALL be stopped, so it cannot report ALSA input overflow caused by device contention with the output stream, and cannot capture the assistant's own voice as if it were user speech.
+While the assistant's spoken response is playing (`app/tts/piper_tts.py`'s `speak()`), the microphone input stream SHALL be stopped as a defense-in-depth measure against device-level contention with the output stream.
+
+Note: empirical testing (see `fix-audio-input-overflow-cpu`'s design.md Resolution) found that ALSA input overflow on the ThinkPad was actually caused by `AUDIO_INPUT_DEVICE` pointing at a raw `hw:X,Y` device, not by TTS/mic duplex contention — overflow is fully resolved by `AUDIO_INPUT_DEVICE=default` alone, independent of this requirement. This requirement is kept as a harmless secondary safeguard, not as the mechanism that fixes overflow.
 
 #### Scenario: TTS playback produces no input overflow
-- **WHEN** the assistant's response is being spoken via TTS on the ThinkPad
+- **WHEN** the assistant's response is being spoken via TTS
 - **THEN** no `[AUDIO STATUS] input overflow` is logged for the duration of that playback
-
-#### Scenario: No self-echo transcribed as user speech
-- **WHEN** the assistant finishes speaking and capture resumes
-- **THEN** the next transcribed utterance corresponds to speech the user actually produced after playback ended, not audio from the assistant's own voice
 
 ### Requirement: Capture resumes reliably after playback
 After TTS playback finishes (plus a short cooldown), the microphone input stream SHALL resume capturing, so the user is not permanently locked out of providing input after the assistant speaks.

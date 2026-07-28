@@ -1,4 +1,12 @@
-## Context
+## Resolution (confirmed root cause, supersedes the analysis below)
+
+Further empirical testing (an isolated diagnostic script opening only the raw `InputStream`, no Whisper/Ollama/TTS at all) showed ALSA input overflow occurring at a steady rate purely from `AUDIO_INPUT_DEVICE=0` (`hw:0,0`, direct ALSA), with zero TTS or duplex activity involved. Switching to `AUDIO_INPUT_DEVICE=default` eliminated overflow completely and unconditionally — including in full pipeline sessions with TTS turns, both with and without this change's stop/start logic active, and both with and without headphones (which also ruled out the acoustic-echo hypothesis below).
+
+**This change's core premise — that TTS/mic duplex contention or acoustic echo caused the overflow — was not correct.** The overflow this change set out to fix is the same overflow already resolved by the `AUDIO_INPUT_DEVICE=default` change in `fix-audio-input-overflow-cpu`. Additionally, the "Whisper hallucinating on near-silent audio right after TTS" symptom that motivated decision on the settle window (`AUDIO_RESUME_SETTLE_MS`) persists even after the real fix, with headphones on, and even before any TTS has occurred in a session — meaning it's a general VAD-sensitivity / Whisper-hallucination issue, not specific to TTS or audio duplex at all. That issue is tracked separately.
+
+The stop/start/mute-window code implemented below is kept in place as a harmless defense-in-depth measure (it correctly scopes itself to only run around TTS and has no observed downside), but it is not necessary for, and was not the mechanism behind, the overflow fix.
+
+## Context (original analysis, see Resolution above)
 
 `app/audio/input.py`'s `audio_producer` opens a single `sounddevice.InputStream` for the whole session lifetime, inside a `with stream: while True: await asyncio.sleep(0.1)` loop. `app/tts/piper_tts.py`'s `speak()` runs synchronously inside `asyncio.to_thread(...)` (called from `stt_consumer` in `app/pipeline/orchestrator_async.py`) and calls `sd.play(audio, samplerate=..., device=output_device)` followed by a blocking `sd.wait()` until playback completes — meaning for the full duration of every TTS response, there are two independent PortAudio streams open at once on the same physical device: the pre-existing input stream and a newly opened output stream.
 
