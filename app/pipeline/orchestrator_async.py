@@ -1,5 +1,9 @@
 import asyncio
+import os
 import time
+import wave
+
+import numpy as np
 
 from app.audio.input import audio_producer
 from app.core.context import SessionContext
@@ -19,6 +23,29 @@ END_PHRASES = {
 def is_end_phrase(text: str, language: str) -> bool:
     text_lower = text.lower().strip()
     return any(phrase in text_lower for phrase in END_PHRASES.get(language, []))
+
+
+# TEMPORARY diagnostic: set DEBUG_SAVE_UTTERANCES=1 to dump every utterance
+# actually sent to Whisper as a WAV file, so it can be listened to directly.
+_DEBUG_SAVE_UTTERANCES = os.environ.get("DEBUG_SAVE_UTTERANCES") == "1"
+_DEBUG_DIR = os.path.expanduser("~/audio_diag/live_utterances")
+_debug_counter = 0
+
+
+def _debug_save_utterance(utterance_16k):
+    global _debug_counter
+    if not _DEBUG_SAVE_UTTERANCES:
+        return
+    os.makedirs(_DEBUG_DIR, exist_ok=True)
+    _debug_counter += 1
+    path = os.path.join(_DEBUG_DIR, f"utterance_{_debug_counter:03d}.wav")
+    audio_int16 = (np.clip(utterance_16k, -1.0, 1.0) * 32767).astype(np.int16)
+    with wave.open(path, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(16000)
+        wf.writeframes(audio_int16.tobytes())
+    print(f"[DEBUG] saved utterance audio to {path}")
 
 
 async def stt_consumer(audio_q, session, tts_active, discard_next_utterance):
@@ -53,6 +80,8 @@ async def stt_consumer(audio_q, session, tts_active, discard_next_utterance):
             discard_next_utterance.clear()
             print("[SKIP] discarding first utterance after resume (capture warmup artifact)")
             continue
+
+        _debug_save_utterance(utterance_16k)
 
         print("[PROCESSING] sending utterance to whisper...")
         t0 = time.perf_counter()
