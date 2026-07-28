@@ -16,13 +16,23 @@
 - [x] 3.2 Raise `AUDIO_RESUME_SETTLE_MS` default from 300 to 4000 (ms), matching the measured transient duration.
 - [x] 3.3 Delay the "🎤 Mic is ON... speak!" print until after the settle window elapses, with an explicit "settling..." message beforehand, so the UI doesn't invite the user to talk into a dead window.
 
-## 4. Verification — ThinkPad, round 2 (with the actual fix)
+## 4. Verification — ThinkPad, round 2 (4s settle window alone)
 
-- [ ] 4.1 Repeat the A/B test once more: record a clear utterance, transcribe it directly and through the live pipeline (now with the 4s settle window); confirm both match.
-- [ ] 4.2 Run a multi-turn live session with clear speech and confirm transcripts are coherent and match what was actually said.
-- [ ] 4.3 Confirm the 4s settle window doesn't feel unusably slow in practice (only applies at session start and after each TTS turn, not continuously).
-- [ ] 4.4 Confirm this doesn't regress the overflow fix or the hallucination filtering from the other changes (run a normal session end to end).
+- [x] 4.1 Live session with the 4s settle window: still 6+ spurious hallucination cycles right after "Mic is ON" and 1 after TTS-resume — 4s was not enough on its own, but no more long garbled sentences (previously "La pausa se ha hecho de tu bodcucho"-style nonsense; now only short filtered hallucinations like "¡Suscríbete!").
+- [x] 4.2 Retested with `AUDIO_RESUME_SETTLE_MS=7000`: down to exactly 1 spurious cycle per resume (both at session start and after TTS) — consistently 1, not 0, regardless of 4s vs. 7s wait. This pattern (always exactly one, unaffected by wait duration) pointed away from "transient needs more time" and toward a deterministic boundary artifact right at the unmute point.
 
-## 5. Verification — MSI (regression check)
+## 5. Deterministic backstop: discard the first utterance after every resume (`app/pipeline/orchestrator_async.py`, `app/audio/input.py`)
 
-- [ ] 5.1 Run a session on the MSI and confirm transcription quality is at least as good as before this change, and that the longer settle window doesn't meaningfully hurt turn-taking responsiveness there.
+- [x] 5.1 Added a shared `discard_next_utterance` `asyncio.Event`, set by `audio_producer` right after each resume (initial stream open and every TTS-resume), consumed once by `stt_consumer` — the first utterance detected after any resume is logged and dropped instead of sent to Whisper, regardless of whether the settle window fully cleared the artifact.
+- [x] 5.2 Raised the persisted `AUDIO_RESUME_SETTLE_MS` default to 7000 (matching the empirically-better result), so at most one spurious utterance needs discarding per resume rather than several.
+
+## 6. Verification — ThinkPad, round 3 (settle window + deterministic discard)
+
+- [ ] 6.1 Live session: confirm no hallucinated/garbled `[USER]` output appears right after "Mic is ON" or after any TTS turn (should now see `[SKIP] discarding first utterance after resume...` instead of a filtered hallucination or garbled text).
+- [ ] 6.2 Repeat the A/B test once more (record + direct transcript vs. live pipeline) for a clear utterance spoken after the settle window elapses.
+- [ ] 6.3 Confirm the ~7s settle window (session start + after every TTS turn) doesn't feel unusably slow in practice.
+- [ ] 6.4 Confirm this doesn't regress the overflow fix or the hallucination filtering from the other changes (run a normal multi-turn session end to end).
+
+## 7. Verification — MSI (regression check)
+
+- [ ] 7.1 Run a session on the MSI and confirm transcription quality is at least as good as before this change, and that the 7s settle window + first-utterance discard don't meaningfully hurt turn-taking responsiveness there (MSI's baseline was already fast/clean, so this is mainly a "doesn't make it worse" check).

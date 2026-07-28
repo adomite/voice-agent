@@ -28,7 +28,7 @@ def _resolve_latency():
         return raw  # e.g. 'low' / 'high', passed through to PortAudio
 
 
-async def audio_producer(queue, tts_active: asyncio.Event):
+async def audio_producer(queue, tts_active: asyncio.Event, discard_next_utterance: asyncio.Event):
     loop = asyncio.get_event_loop()
     device = find_input_device()
 
@@ -81,10 +81,14 @@ async def audio_producer(queue, tts_active: asyncio.Event):
     cooldown_s = float(os.environ.get('TTS_COOLDOWN_MS', 250)) / 1000
     # Opening/restarting the stream produces several seconds of clipped,
     # DC-biased audio before it settles (confirmed via direct measurement:
-    # peak=32768 and a large decaying DC offset for ~3-4s after open).
-    # 300ms was nowhere near enough; this covers both the very first open
-    # and every resume after a TTS pause.
-    settle_s = float(os.environ.get('AUDIO_RESUME_SETTLE_MS', 4000)) / 1000
+    # peak=32768 and a decaying DC offset for several seconds after open).
+    # Even a generous wait (tested up to 7s) still lets through exactly one
+    # spurious utterance right at the unmute boundary, regardless of how
+    # long we waited beforehand -- so this settle window reduces the
+    # problem to "at most one" spurious utterance per resume, and
+    # discard_next_utterance (consumed once in stt_consumer) drops that
+    # last one deterministically instead of chasing an ever-longer wait.
+    settle_s = float(os.environ.get('AUDIO_RESUME_SETTLE_MS', 7000)) / 1000
 
     with stream:
         print(f"[AUDIO] settling for {settle_s:.1f}s before capture starts...")
@@ -92,6 +96,7 @@ async def audio_producer(queue, tts_active: asyncio.Event):
         await asyncio.sleep(settle_s)
         print("🎤 Mic is ON... speak!")
         capturing = True
+        discard_next_utterance.set()
         while True:
             if tts_active.is_set() and capturing:
                 # Release the device while TTS is playing so capture and
@@ -104,10 +109,11 @@ async def audio_producer(queue, tts_active: asyncio.Event):
                     try:
                         stream.start()
                         capturing = True
-                        # Ignore audio for a short settle window: restarting
-                        # the stream can produce a hardware pop/transient
-                        # that the VAD would otherwise mistake for speech.
+                        # Ignore audio for a settle window: restarting the
+                        # stream reproduces the same capture-warmup
+                        # transient as the initial open.
                         mute_until = time.monotonic() + settle_s
+                        discard_next_utterance.set()
                     except Exception as exc:
                         print(f"[AUDIO] failed to resume capture, will retry: {exc}")
             await asyncio.sleep(0.05)

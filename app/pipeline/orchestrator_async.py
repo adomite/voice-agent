@@ -21,7 +21,7 @@ def is_end_phrase(text: str, language: str) -> bool:
     return any(phrase in text_lower for phrase in END_PHRASES.get(language, []))
 
 
-async def stt_consumer(audio_q, session, tts_active):
+async def stt_consumer(audio_q, session, tts_active, discard_next_utterance):
     segmenter = WebRTCUtteranceSegmenter(
         input_sample_rate=16000,
         target_sample_rate=16000,
@@ -47,6 +47,11 @@ async def stt_consumer(audio_q, session, tts_active):
             continue
         if len(utterance_16k) < 8000:
             print("[SKIP] utterance too short")
+            continue
+
+        if discard_next_utterance.is_set():
+            discard_next_utterance.clear()
+            print("[SKIP] discarding first utterance after resume (capture warmup artifact)")
             continue
 
         print("[PROCESSING] sending utterance to whisper...")
@@ -95,8 +100,9 @@ async def run_pipeline(mode_name="es_interview"):
     audio_q = asyncio.Queue(maxsize=20)
     session = SessionContext(mode_name=mode_name)
     tts_active = asyncio.Event()
+    discard_next_utterance = asyncio.Event()
 
     await asyncio.gather(
-        audio_producer(audio_q, tts_active),
-        stt_consumer(audio_q, session, tts_active),
+        audio_producer(audio_q, tts_active, discard_next_utterance),
+        stt_consumer(audio_q, session, tts_active, discard_next_utterance),
     )
