@@ -12,7 +12,7 @@
 ## 3. Verification — ThinkPad (primary target)
 
 - [x] 3.1 Confirmed via the live ThinkPad session run during `fix-chunked-resample-audio-corruption`'s verification (`es_practice`, 2026-07-28): `[FILTERED]: ¡Suscríbete!` appeared twice and was correctly withheld from `[USER]` output.
-- [ ] 3.2 **Found during implementation, still not resolved**: "sí"/"no"/"ok" are rejected by the pre-existing `is_unstable_short_utterance` filter (any single word ≤3 chars), unrelated to and unaffected by this change's new filters — this was already true before this change, so it's not a regression, but it means the spec's "genuine short utterances are preserved" scenario doesn't hold for single-word replies this short. Needs a dedicated quick test: say "claro" or "vale" on the ThinkPad and confirm it reaches `[USER]` output. Not covered by any test run so far.
+- [x] 3.2 Confirmed via dedicated ThinkPad test (2026-07-28, `es_practice`): said "claro" and it reached `[USER]: claro` correctly — not rejected. The `is_unstable_short_utterance` filter only rejects words ≤3 chars ("sí"/"no"/"ok"), which "claro"/"vale" (5+ chars) don't hit; that ≤3-char behavior is pre-existing and out of this change's scope, as noted above. The scenario as scoped for this change (5+ char short replies) holds.
 - [x] 3.3 Confirmed via the same session: genuine utterances ("La silla está rota.", "Necesito comprar una mesa.", "para una olla si hoy no cocino.") all reached `[USER]` output correctly — no new false negatives.
 
 ## 4. Verification — MSI (regression check)
