@@ -4,7 +4,19 @@ The chunked-resampling fix below was implemented and verified mechanically (synt
 
 This points to a multi-second hardware/driver warm-up transient on stream open — plausible on the `default` (PipeWire) device — that the existing `AUDIO_RESUME_SETTLE_MS` mute window (from the archived `fix-tts-audio-duplex-overflow`, default 300ms) was drastically too short for, and which was **never applied at all** at the very first stream open (only on resume-after-TTS) — explaining why first-utterance-of-session corruption has been a recurring pattern throughout this entire investigation.
 
-The chunked-resampling fix (Decisions 1-3 below) is not wrong or reverted — it's a real, verified improvement and stays in place — but it was not the dominant cause of the observed garbling. See Decision 4 for the actual fix.
+The chunked-resampling fix (Decisions 1-3 below) is not wrong or reverted — it's a real, verified improvement and stays in place — but it was not the dominant cause of the observed garbling. See Decision 4 for the settle-window fix, and Resolution update 2 below for the actual dominant cause.
+
+## Resolution update 2 (the actual dominant cause): input_sample_rate was hardcoded wrong, all along
+
+After the settle-window fix (Decision 4) and the discard-first-utterance backstop (Decision 5) were both in place, live retesting still produced garbled transcripts unrelated to what was said. Saving the exact audio buffer sent to Whisper to a WAV file and listening to it directly (`DEBUG_SAVE_UTTERANCES=1`) revealed the audio played back **noticeably slow and distorted** — the classic signature of a sample-rate mismatch.
+
+Root cause, found by inspecting `app/pipeline/orchestrator_async.py`'s `stt_consumer`: `WebRTCUtteranceSegmenter` was constructed with `input_sample_rate=16000` hardcoded — but the mic actually captures at `AUDIO_SAMPLE_RATE` (48000 on the ThinkPad). Since `downsample_audio()` (`app/stt/audio_utils.py`) short-circuits when `orig_sr == target_sr`, and both were 16000, **resampling was silently a no-op for the entire session**: raw 48kHz audio flowed through mislabeled as 16kHz, for both VAD framing (frames computed as if 30ms @ 16kHz were actually only 10ms of real audio, and WebRTC VAD analyzing content 3x higher in frequency than it was told to expect) and the final audio handed to Whisper (which interprets it as 16kHz PCM, causing ~3x slowdown and pitch distortion).
+
+This bug **predates every change made today** — it was present before the overflow fix, before the chunked-resampling fix, before the settle-window work. It plausibly explains a large share of the erratic VAD behavior (near-constant "speech" classification regardless of `vad_aggressiveness`) and hallucinated/garbled transcripts observed throughout this entire investigation, independent of and in addition to the other confirmed issues (raw ALSA device overflow, capture-warmup transient).
+
+None of the other fixes in this session are wrong or wasted — overflow is a real, independently-confirmed fix; the chunked-resampling and settle-window fixes are real improvements to how audio is assembled and when capture starts — but this sample-rate bug means every one of them was operating on mislabeled audio the whole time, which likely explains why symptoms kept partially-but-not-fully improving with each fix.
+
+**Fix**: pass the actual capture rate to the segmenter instead of hardcoding it: `input_sample_rate=int(os.environ.get('AUDIO_SAMPLE_RATE', 48000))`, matching what `app/audio/input.py` actually uses to open the stream.
 
 ## Context
 

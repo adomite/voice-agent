@@ -26,13 +26,23 @@
 - [x] 5.1 Added a shared `discard_next_utterance` `asyncio.Event`, set by `audio_producer` right after each resume (initial stream open and every TTS-resume), consumed once by `stt_consumer` — the first utterance detected after any resume is logged and dropped instead of sent to Whisper, regardless of whether the settle window fully cleared the artifact.
 - [x] 5.2 Raised the persisted `AUDIO_RESUME_SETTLE_MS` default to 7000 (matching the empirically-better result), so at most one spurious utterance needs discarding per resume rather than several.
 
-## 6. Verification — ThinkPad, round 3 (settle window + deterministic discard)
+## 6. Verification — ThinkPad, round 3 (settle window + deterministic discard, still broken)
 
-- [ ] 6.1 Live session: confirm no hallucinated/garbled `[USER]` output appears right after "Mic is ON" or after any TTS turn (should now see `[SKIP] discarding first utterance after resume...` instead of a filtered hallucination or garbled text).
-- [ ] 6.2 Repeat the A/B test once more (record + direct transcript vs. live pipeline) for a clear utterance spoken after the settle window elapses.
-- [ ] 6.3 Confirm the ~7s settle window (session start + after every TTS turn) doesn't feel unusably slow in practice.
-- [ ] 6.4 Confirm this doesn't regress the overflow fix or the hallucination filtering from the other changes (run a normal multi-turn session end to end).
+- [x] 6.1 Live session with `DEBUG_SAVE_UTTERANCES=1` (temporary diagnostic, `app/pipeline/orchestrator_async.py`): first-utterance discard worked correctly, but 4-6 more spurious hallucinations still followed per resume (not "exactly one" as round 2 suggested — count varied session to session), and real `[USER]` content still didn't match what was said. Listening to the saved WAV directly: audio played back noticeably slow and distorted — the signature of a sample-rate mismatch, not a chunking or transient issue.
 
-## 7. Verification — MSI (regression check)
+## 7. The actual dominant fix: correct `input_sample_rate` (`app/pipeline/orchestrator_async.py`)
 
-- [ ] 7.1 Run a session on the MSI and confirm transcription quality is at least as good as before this change, and that the 7s settle window + first-utterance discard don't meaningfully hurt turn-taking responsiveness there (MSI's baseline was already fast/clean, so this is mainly a "doesn't make it worse" check).
+- [x] 7.1 Found `WebRTCUtteranceSegmenter` was constructed with `input_sample_rate=16000` hardcoded, while the mic actually captures at `AUDIO_SAMPLE_RATE` (48000 on the ThinkPad) — making `downsample_audio()`'s `orig_sr == target_sr` short-circuit a silent no-op for the entire session, for both VAD framing and the final Whisper-bound audio. Predates every change made in this session.
+- [x] 7.2 Fixed: `input_sample_rate=int(os.environ.get('AUDIO_SAMPLE_RATE', 48000))`, matching what `app/audio/input.py` actually uses to open the stream.
+
+## 8. Verification — ThinkPad, round 4 (with the sample-rate fix)
+
+- [ ] 8.1 Listen to a freshly-saved `DEBUG_SAVE_UTTERANCES=1` WAV and confirm it now plays back at normal speed/pitch, matching what was actually said.
+- [ ] 8.2 Live session: confirm `[USER]` transcripts now match what was said, and confirm whether the settle-window/discard-first-utterance machinery from sections 3-5 is still needed at this reduced severity, or can be scaled back (e.g. shorter `AUDIO_RESUME_SETTLE_MS`) now that VAD is analyzing correctly-labeled audio.
+- [ ] 8.3 Repeat the A/B test once more (record + direct transcript vs. live pipeline) to confirm both fully match.
+- [ ] 8.4 Confirm this doesn't regress the overflow fix or the hallucination filtering from the other changes (run a normal multi-turn session end to end).
+- [ ] 8.5 Remove or otherwise clean up the temporary `DEBUG_SAVE_UTTERANCES` diagnostic once no longer needed (or leave it, off by default, as a permanent debugging aid — decide during this verification pass).
+
+## 9. Verification — MSI (regression check)
+
+- [ ] 9.1 Run a session on the MSI and confirm transcription quality is at least as good as before this change. Note: MSI's `AUDIO_SAMPLE_RATE=16000` (per its `docker-compose.yml`), so the same hardcoded-16000 bug was accidentally a no-op *correctly* there — this fix should be a no-op change for MSI's behavior, not a regression risk.

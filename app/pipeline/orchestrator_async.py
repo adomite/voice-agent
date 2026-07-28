@@ -50,7 +50,13 @@ def _debug_save_utterance(utterance_16k):
 
 async def stt_consumer(audio_q, session, tts_active, discard_next_utterance):
     segmenter = WebRTCUtteranceSegmenter(
-        input_sample_rate=16000,
+        # Must match the mic's actual capture rate (AUDIO_SAMPLE_RATE in
+        # app/audio/input.py), NOT the target rate. This was hardcoded to
+        # 16000 == target_sample_rate, which made downsample_audio() a
+        # silent no-op (orig_sr == target_sr) -- raw 48kHz audio was
+        # flowing through mislabeled as 16kHz for both VAD framing and the
+        # audio sent to Whisper, playing back ~3x slower/lower-pitched.
+        input_sample_rate=int(os.environ.get('AUDIO_SAMPLE_RATE', 48000)),
         target_sample_rate=16000,
         frame_ms=30,
         vad_aggressiveness=2,
