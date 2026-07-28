@@ -27,7 +27,7 @@ def _resolve_latency():
         return raw  # e.g. 'low' / 'high', passed through to PortAudio
 
 
-async def audio_producer(queue):
+async def audio_producer(queue, tts_active: asyncio.Event):
     loop = asyncio.get_event_loop()
     device = find_input_device()
 
@@ -70,8 +70,23 @@ async def audio_producer(queue):
         stream_kwargs["latency"] = latency
 
     stream = sd.InputStream(**stream_kwargs)
+    cooldown_s = float(os.environ.get('TTS_COOLDOWN_MS', 250)) / 1000
 
     with stream:
         print("🎤 Mic is ON... speak!")
+        capturing = True
         while True:
-            await asyncio.sleep(0.1)
+            if tts_active.is_set() and capturing:
+                # Release the device while TTS is playing so capture and
+                # playback never contend for the same ALSA hardware.
+                stream.stop()
+                capturing = False
+            elif not tts_active.is_set() and not capturing:
+                await asyncio.sleep(cooldown_s)
+                if not tts_active.is_set():
+                    try:
+                        stream.start()
+                        capturing = True
+                    except Exception as exc:
+                        print(f"[AUDIO] failed to resume capture, will retry: {exc}")
+            await asyncio.sleep(0.05)

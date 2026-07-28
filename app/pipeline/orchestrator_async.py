@@ -21,7 +21,7 @@ def is_end_phrase(text: str, language: str) -> bool:
     return any(phrase in text_lower for phrase in END_PHRASES.get(language, []))
 
 
-async def stt_consumer(audio_q, session):
+async def stt_consumer(audio_q, session, tts_active):
     segmenter = WebRTCUtteranceSegmenter(
         input_sample_rate=16000,
         target_sample_rate=16000,
@@ -79,7 +79,11 @@ async def stt_consumer(audio_q, session):
         session.add_assistant_message(response)
         print(f"\n[AGENT]: {response}\n")
 
-        await asyncio.to_thread(speak, response, session.tts_language)
+        tts_active.set()
+        try:
+            await asyncio.to_thread(speak, response, session.tts_language)
+        finally:
+            tts_active.clear()
 
         if is_end_phrase(text, session.stt_language):
             session.close_session(summary=response)
@@ -90,8 +94,9 @@ async def stt_consumer(audio_q, session):
 async def run_pipeline(mode_name="es_interview"):
     audio_q = asyncio.Queue(maxsize=20)
     session = SessionContext(mode_name=mode_name)
+    tts_active = asyncio.Event()
 
     await asyncio.gather(
-        audio_producer(audio_q),
-        stt_consumer(audio_q, session),
+        audio_producer(audio_q, tts_active),
+        stt_consumer(audio_q, session, tts_active),
     )
