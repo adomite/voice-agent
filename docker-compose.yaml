@@ -9,9 +9,12 @@ services:
     network_mode: "host"
     volumes:
       - "/run/user/1000/pulse/native:/run/user/1000/pulse/native"
+      - "./memory_data:/app/memory_data"
     environment:
       - PULSE_SERVER=unix:/run/user/1000/pulse/native
       - AUDIO_INPUT_DEVICE=hw:0,7
       - AUDIO_SAMPLE_RATE=16000
       - OLLAMA_BASE_URL=http://127.0.0.1:11434/v1
       - OLLAMA_MODEL=llama3.2
+      - PIPER_MODELS_DIR=/app/models/piper
+      - MEMORY_DIR=/app/memory_data

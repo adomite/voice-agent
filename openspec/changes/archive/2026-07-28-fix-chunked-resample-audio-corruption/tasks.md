@@ -46,6 +46,7 @@
 
 ## 9. Verification — MSI (regression check)
 
+<<<<<<< Updated upstream:openspec/changes/archive/2026-07-28-fix-chunked-resample-audio-corruption/tasks.md
 - [x] 9.1 Ran a full multi-turn `pt_practice` session on MSI (rebuilt container on `worktree-fix-audio-input-overflow` @ `6bc48d3`). Transcription quality was good — multiple correct Portuguese transcripts matching real speech ("Você pode conjugar ou ver você?", "Conjuga o verbo ser.", etc.). One `[AUDIO STATUS] input overflow` occurred, exactly at a TTS-resume boundary; the pipeline recovered immediately and continued correctly. This matches a symptom reported earlier in this same investigation ("on MSI... sometimes it didn't hear me, so the tutor answered itself") — i.e. a pre-existing quirk of MSI's raw ALSA `hw:0,7` device (same category as the ThinkPad's original `hw:0,0` problem, never migrated to a PipeWire-routed device on MSI), not a regression introduced by this change. See section 10 below.
 - [x] 9.2 Confirmed: `_resolve_channels()`'s probe-then-open pattern resolved to `channels=1` cleanly under MSI's Docker audio passthrough (`/dev/snd` device passthrough), no busy/exclusive-access errors. No regression.
 
@@ -54,3 +55,6 @@
 - MSI's `AUDIO_INPUT_DEVICE=hw:0,7` (raw ALSA, `docker-compose.yaml`) retains the same class of resume-boundary overflow risk that was fixed on the ThinkPad by switching to the PipeWire-routed `default` device (`fix-audio-input-overflow-cpu`, archived). Never applied to MSI. Candidate for a small follow-up change mirroring that fix, if MSI has an equivalent PipeWire/`default` capture device available under Docker.
 - `docker compose up --build` always launches `pt_practice` (no regression, no bug): `dockerfile` has `CMD ["python", "main.py"]` with no mode argument, and `main.py`'s `mode_name` defaults to `"pt_practice"` when none is given. Explicit mode selection requires `docker compose run voice-agent python main.py <mode>` per the README. Purely a documentation/expectation gap if it needs addressing.
 - During the MSI test, a Whisper hallucination ("Legendas pela comunidade de Amara.org", the Portuguese/English variant of the amara.org captioning-credit artifact) was **not** caught by `is_known_hallucination()` and was sent to the LLM as real user input, derailing that turn. The blocklist in `app/stt/postprocess.py` only covers the Spanish wording. This is in scope for `tune-vad-hallucination-filtering` (still open), not this change.
+=======
+
+>>>>>>> Stashed changes:openspec/changes/fix-chunked-resample-audio-corruption/tasks.md
