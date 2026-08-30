@@ -42,7 +42,7 @@
 - [x] 8.3 Superseded by the live multi-turn test in 8.2, which is a stronger signal than a single A/B replay: multiple consecutive utterances transcribed correctly end-to-end through the real pipeline (segmenter → Whisper → Ollama → TTS), not just recorded-vs-live equivalence for one clip.
 - [x] 8.4 Confirmed no regression: overflow-free (no `[AUDIO STATUS]` overflow messages), and `tune-vad-hallucination-filtering`'s filter correctly caught `¡Suscríbete!` hallucinations between real utterances (`[FILTERED]` lines) without blocking real speech.
 - [x] 8.5 Decided: leaving `DEBUG_SAVE_UTTERANCES` in place (off by default, zero cost when unset) — it was essential for finding both round-3 causes and for the MSI hallucination finding below; keep as a permanent debugging aid.
-- [ ] 8.6 Persist the ALSA `Capture` gain setting on the ThinkPad (currently session-only, lost on reboot) via `sudo alsactl store`. Documented in README as a required one-time-per-boot step (`amixer -c 0 sset Capture 70%`) either way; this is a manual machine-side action, not code, and doesn't block closing this change — the fix works correctly within a session regardless.
+- [x] 8.6 Persisted ALSA `Capture` gain via `sudo alsactl store` (2026-08-30). Note: found gain had silently reverted to 100%/+30dB at some point after the original July 28 fix, despite `alsa-restore.service` being active — the original `alsactl store` apparently never took or was overwritten. Re-set to 70%/15.75dB and re-persisted; confirmed `/var/lib/alsa/asound.state` timestamp updated and `alsa-restore.service` active. Worth re-checking after the next reboot to confirm it actually holds this time, since it silently failed once already.
 
 ## 9. Verification — MSI (regression check)
 
