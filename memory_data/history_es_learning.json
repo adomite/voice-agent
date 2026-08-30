@@ -1,0 +1,54 @@
+[
+  {
+    "role": "system",
+    "content": "Eres un asistente de aprendizaje en español.\nEl usuario hará preguntas sobre cualquier tema y debes:\n1. Responder de forma clara, precisa y didáctica en español\n2. Usar ejemplos concretos para ilustrar conceptos\n3. Corregir gentilmente errores de gramática en la pregunta si los hay\n4. Preguntar si el usuario quiere profundizar algún aspecto de la respuesta\n\nAdapta la complejidad de la respuesta al nivel demostrado por el usuario."
+  },
+  {
+    "role": "user",
+    "content": "Hola buenos días ¿Cómo estás?"
+  },
+  {
+    "role": "assistant",
+    "content": "¡Hola! Me alegra verte aquí hoy. Estoy funcionando correctamente, gracias. ¿En qué puedo ayudarte hoy? ¿Tienes alguna pregunta o tema que te gustaría discutir?\n\n(Nota: Me parece bien que el español de tu pregunta es un poco coloquial, pero no hay nada malo en eso. En España y América Latina, especialmente, se utiliza un lenguaje más cercano a la conversación cotidiana. ¿Quieres profundizar en algo sobre cómo funciona el lenguaje coloquial?"
+  },
+  {
+    "role": "user",
+    "content": "Hola, ¿me puedes ayudar a ayudarme con una entrevista de trabajo?"
+  },
+  {
+    "role": "assistant",
+    "content": "¡Claro que sí! Me encantaría ayudarte en tu preparación para la entrevista. Aquí tienes algunas sugerencias y consejos generales sobre cómo prepararse.\n\nAntes de empezar, es importante recordar que cada entrevista es única y puede haber diferentes tipos de entrevistas (resumen, para puestos de trabajo específicos o intercolegiales, etc.). \nPuedo darte algunos consejos prácticos, pero sería útil que me informaras un poco más sobre el tipo de entrevista vas a hacer. ¿Es una entrevista en la empresa donde trabajas actualmente o es una entrevista para una nueva empresa? Tendríamos que orientar la información que te doy"
+  },
+  {
+    "role": "user",
+    "content": "Es para una entrevista donde trabajo hoy."
+  },
+  {
+    "role": "assistant",
+    "content": "¡Genial! En ese caso, aquí te dejo algunas sugerencias generales para prepararte:\n\n1. **Conoce el papel**: Asegúrate de conocer las responsabilidades y expectativas del puesto al que estás solicitando ser considerado.\n2. **Investiga sobre la empresa**: Averigua algo sobre la historia, misión y valores de la empresa, así como sobre su cultura laboral.\n3. **Prepara tus logros y experiencias**: Piensa en lo que tienes hecho bien en tu trabajo actual o previo, y prepara ejemplos concretos para explicar tus logros y habilidades.\n4. **Practica respuestas comunes**: Investiga sobre preguntas comunes de entrevista y prátimalas con un amigo o familiar para sentirte más cómodo.\n\n¿Quieres que te sugiera algunas preguntas comunes en entrevistas? Y también puedes pedirme información sobre la empresa a la que estás solicitando ser considerado, ¿quieres saber algunos ejemplos de preguntas con las que puede hacerte una empresa?"
+  },
+  {
+    "role": "user",
+    "content": "La empresa se llama WONDERFUL IA."
+  },
+  {
+    "role": "assistant",
+    "content": "¡Interesante! WONDERFUL IA suena como un nombre que enfatiza la innovación y la creatividad en el ámbito de la inteligencia artificial (IA). Aquí te dejo algunas sugerencias adicionales para prepararte:\n\n**Abarca la lenguaje y las tecnologías utilizadas**: Ponos a leer sobre las últimas novedades en IA, como por ejemplo: Machine Learning, Deep learning. También puede ser útil buscar las redes sociales de WONDERFUL IA para conocer algo de su cultura, sus valores e su comunidad de clientes.\n\n**Busca referencias relevantes**: Si tienes algún contacto que trabaja o ha trabajado con WONDERFUL IA, preguntale algo sobre la empresa y pide referencias. \n¿Quieres saber sobre este parte más profunda te lo explico también?"
+  },
+  {
+    "role": "user",
+    "content": "¿Qué sabes del rol deployment strategist?"
+  },
+  {
+    "role": "assistant",
+    "content": "El rol de Deployment Strategist es una posición muy interesante en el contextso de la Inteligencia Artificial (IA) y en particular cuando se trata también de la automatización des de la implementación. \n\nPuede que sea un poco ambicioso, pero te proporciono algunos ejemplos concretos:\n\nPor ejemplo, al igual que en una producción industrial de vehículos si hay alguna reparación o mantenimiento por fuera debe existir alguien que supervisa las operaciones tanto para asegurar las medidas correctas de mantenimento y la calidad del producto. De manera similar el rol de Deployment Strategist es el encargado de planear, implementar el desarrollo de nuevos sistemas.\n\nAl igual a otro puesto de liderazgo al Deployeag Strategista debe estar bien explicada la importancia de lo que hace, para asegurar así al público que los cambios a realizar son efectivos.\n\nEjemplos concretos:\nAl realizar un nuevo lanzamiento podemos tener dos posibles tipos en la empresa o proyecto de lanzar un sistema: uno con cierta comunidad tecnologia, y otro no ya sea debido a las restricciones burocráticas o más que cualquier tipo de limitacion. El objetivo del role Deployeategic es evaluar estos sistemas según su viabilidad.\n \n\nEs una buena idea conocer el impacto en cada una de estas comunidades, para entender la resistencia o aceptación del cambio.\n\nPor ejemplo si no se tiene mucha experiencia en un determinada tecnologia a la hora de implementarla."
+  },
+  {
+    "role": "user",
+    "content": "Ok, muchas gracias, terminamos por hoy."
+  },
+  {
+    "role": "assistant",
+    "content": "¡De nada! Fue un placer ayudarte y prepararte para tu entrevista.\n\nRecuerda que es importante sentirte seguro y confiado con tus respuestas y preguntas. No dudes en preguntar si tienes alguna duda o necesitas algo más a mano.\n\nBuena suerte en tu entrevista con WONDERFUL IA, espero que tengas un buen paso y puedas desempeñar el rol de Deployment Strategist con éxito.\n\nUn saludo!"
+  }
+]
