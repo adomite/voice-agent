@@ -51,3 +51,10 @@ rules:
     - Si el cambio involucra audio o timing, incluir tareas de diagnóstico
       separadas de tareas de fix, y no proponer el fix hasta confirmar causa raíz
     - Especificar explícitamente si el cambio aplica a ThinkPad, MSI, o ambos
+  specs:
+    - Usar formato Given/When/Then para describir comportamiento esperado
+    - Referenciar patrones de diseño y arquitectura existentes antes de inventar uno nuevo
+  tasks:
+    - Incluir pasos de diagnóstico y validación en tareas de fix
+    - Incluir pasos de validación en tareas de feature
+    - Mantener tareas pequeñas e implementables.
