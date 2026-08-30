@@ -1,5 +1,9 @@
 import asyncio
+import os
 import time
+import wave
+
+import numpy as np
 
 from app.audio.input import audio_producer
 from app.core.context import SessionContext
@@ -21,16 +25,45 @@ def is_end_phrase(text: str, language: str) -> bool:
     return any(phrase in text_lower for phrase in END_PHRASES.get(language, []))
 
 
-async def stt_consumer(audio_q, session):
+# TEMPORARY diagnostic: set DEBUG_SAVE_UTTERANCES=1 to dump every utterance
+# actually sent to Whisper as a WAV file, so it can be listened to directly.
+_DEBUG_SAVE_UTTERANCES = os.environ.get("DEBUG_SAVE_UTTERANCES") == "1"
+_DEBUG_DIR = os.path.expanduser("~/audio_diag/live_utterances")
+_debug_counter = 0
+
+
+def _debug_save_utterance(utterance_16k):
+    global _debug_counter
+    if not _DEBUG_SAVE_UTTERANCES:
+        return
+    os.makedirs(_DEBUG_DIR, exist_ok=True)
+    _debug_counter += 1
+    path = os.path.join(_DEBUG_DIR, f"utterance_{_debug_counter:03d}.wav")
+    audio_int16 = (np.clip(utterance_16k, -1.0, 1.0) * 32767).astype(np.int16)
+    with wave.open(path, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(16000)
+        wf.writeframes(audio_int16.tobytes())
+    print(f"[DEBUG] saved utterance audio to {path}")
+
+
+async def stt_consumer(audio_q, session, tts_active, discard_next_utterance):
     segmenter = WebRTCUtteranceSegmenter(
-        input_sample_rate=16000,
+        # Must match the mic's actual capture rate (AUDIO_SAMPLE_RATE in
+        # app/audio/input.py), NOT the target rate. This was hardcoded to
+        # 16000 == target_sample_rate, which made downsample_audio() a
+        # silent no-op (orig_sr == target_sr) -- raw 48kHz audio was
+        # flowing through mislabeled as 16kHz for both VAD framing and the
+        # audio sent to Whisper, playing back ~3x slower/lower-pitched.
+        input_sample_rate=int(os.environ.get('AUDIO_SAMPLE_RATE', 48000)),
         target_sample_rate=16000,
         frame_ms=30,
         vad_aggressiveness=2,
         start_speech_frames=3,
         end_silence_frames=14,
         pre_speech_frames=6,
-        min_speech_frames=6,
+        min_speech_frames=9,
     )
 
     last_text = ""
@@ -48,6 +81,13 @@ async def stt_consumer(audio_q, session):
         if len(utterance_16k) < 8000:
             print("[SKIP] utterance too short")
             continue
+
+        if discard_next_utterance.is_set():
+            discard_next_utterance.clear()
+            print("[SKIP] discarding first utterance after resume (capture warmup artifact)")
+            continue
+
+        _debug_save_utterance(utterance_16k)
 
         print("[PROCESSING] sending utterance to whisper...")
         t0 = time.perf_counter()
@@ -79,7 +119,11 @@ async def stt_consumer(audio_q, session):
         session.add_assistant_message(response)
         print(f"\n[AGENT]: {response}\n")
 
-        await asyncio.to_thread(speak, response, session.tts_language)
+        tts_active.set()
+        try:
+            await asyncio.to_thread(speak, response, session.tts_language)
+        finally:
+            tts_active.clear()
 
         if is_end_phrase(text, session.stt_language):
             session.close_session(summary=response)
@@ -90,8 +134,10 @@ async def stt_consumer(audio_q, session):
 async def run_pipeline(mode_name="es_interview"):
     audio_q = asyncio.Queue(maxsize=20)
     session = SessionContext(mode_name=mode_name)
+    tts_active = asyncio.Event()
+    discard_next_utterance = asyncio.Event()
 
     await asyncio.gather(
-        audio_producer(audio_q),
-        stt_consumer(audio_q, session),
+        audio_producer(audio_q, tts_active, discard_next_utterance),
+        stt_consumer(audio_q, session, tts_active, discard_next_utterance),
     )

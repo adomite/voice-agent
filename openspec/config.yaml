@@ -1,0 +1,60 @@
+schema: spec-driven
+
+context: |
+  Voice agent multilingüe (ES/EN/PT) para práctica de entrevistas y aprendizaje de idiomas.
+
+  Stack técnico:
+  - STT: faster-whisper (modelo "small", int8, CPU)
+  - VAD: WebRTC VAD
+  - LLM: Ollama, modelo configurable vía OLLAMA_MODEL en .env (ThinkPad usa llama3.2:1b)
+  - TTS: Piper
+  - Memoria: JSON persistente en ./memory_data
+  - Orquestación: Python asyncio (app/pipeline/orchestrator_async.py)
+
+  Entornos duales (el proyecto debe funcionar en ambos):
+  - ThinkPad: venv, CPU-only, mic hw:0,0 (ALC257 Analog), AUDIO_SAMPLE_RATE=48000
+    - **Hardware Model:** Lenovo ThinkPad T480
+    - **Memory:** 16.0 GiB
+    - **Processor:** Intel® Core™ i7-8550U × 8
+    - **Graphics:** Intel® UHD Graphics 620 (KBL GT2)
+    - **Disk Capacity:** 512.1 GB
+    - **Firmware Version:** N24ET81W (1.56 )
+    - **OS Name:** Ubuntu 24.04.4 LTS
+    - **OS Build:** (null)
+    - **OS Type:** 64-bit
+    - **GNOME Version:** 46
+    - **Windowing System:** Wayland
+    - **Kernel Version:** Linux 6.17.0-23-generic
+
+  - MSI: Docker, GPU disponible, mic hw:0,7 vía ALSA passthrough, 
+    - **Hardware Model:**                              Micro-Star International Co., Ltd. Prestige 14 A12UC
+    - **Memory:**                                      16.0 GiB
+    - **Processor:**                                   12th Gen Intel® Core™ i7-1260P × 16
+    - **Graphics:**                                    Intel® Iris® Xe Graphics (ADL GT2)
+    - **Graphics 1:**                                  NVIDIA GeForce RTX™ 3050 Laptop GPU
+    - **Disk Capacity:**                               512.1 GB
+    - **Firmware Version:**                            E14C6IMS.10E
+    - **OS Name:**                                     Ubuntu 24.04.4 LTS
+    - **OS Build:**                                    (null)
+    - **OS Type:**                                     64-bit
+    - **GNOME Version:**                               46
+    - **Windowing System:**                            X11
+    - **Kernel Version:**                              Linux 6.17.0-23-generic
+
+  Convenciones:
+  - Verificar comportamiento empíricamente antes de asumir causa raíz de un bug
+  - Cualquier fix debe validarse en ambos entornos antes de considerarse resuelto,
+    no asumir que un fix en una máquina aplica igual a la otra
+
+rules:
+  proposal:
+    - Si el cambio involucra audio o timing, incluir tareas de diagnóstico
+      separadas de tareas de fix, y no proponer el fix hasta confirmar causa raíz
+    - Especificar explícitamente si el cambio aplica a ThinkPad, MSI, o ambos
+  specs:
+    - Usar formato Given/When/Then para describir comportamiento esperado
+    - Referenciar patrones de diseño y arquitectura existentes antes de inventar uno nuevo
+  tasks:
+    - Incluir pasos de diagnóstico y validación en tareas de fix
+    - Incluir pasos de validación en tareas de feature
+    - Mantener tareas pequeñas e implementables.
